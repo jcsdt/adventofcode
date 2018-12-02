@@ -1,6 +1,7 @@
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::collections::HashSet;
 
 #[derive(Debug)]
 enum ProgramError {
@@ -27,11 +28,23 @@ fn main() -> Result<()> {
     let filename = &args[1];
     let f = File::open(filename)?;
 
-    let parsing: Result<Vec<i32>> = BufReader::new(f).lines()
+    let parsed: Result<_> = BufReader::new(f).lines()
         .map(|line| line?.parse::<i32>().map_err(|e| e.into()))
         .collect();
+    
+    let vector: Vec<i32> = parsed?;
+    let mut input = vector.iter().cycle();
 
-    let result: i32 = parsing?.iter().sum();
+    let mut acc = 0;
+    let mut set = HashSet::new();
+    let result: &i32 = loop {
+        if !set.insert(acc) {
+            break &acc;
+        }
+
+        let v = input.next().expect("a cycle should always have a value");
+        acc += v;
+    };
 
     println!("{}", result);
 
