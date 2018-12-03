@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::io::BufRead;
 
 use aoc::runner::{run, Result};
 
@@ -22,10 +21,10 @@ fn select_two_and_three(counts: HashSet<i32>) -> (i32, i32) {
 }
 
 fn main() -> Result<()> {
-    run(|reader| {
-        let (x, y) = reader
-            .lines()
-            .map(|s| count_letters(&s.unwrap()))
+    run(|content| {
+        let (x, y) = content
+            .split("\n")
+            .map(|s| count_letters(&s))
             .map(|letters| select_two_and_three(letters))
             .fold((0, 0), |a, b| (a.0 + b.0, a.1 + b.1));
 

@@ -1,13 +1,12 @@
 use std::collections::HashSet;
-use std::io::BufRead;
 
 use aoc::runner::{run, Result};
 
 fn main() -> Result<()> {
-    run(|reader| {
-        let parsed: Result<_> = reader
-            .lines()
-            .map(|line| line?.parse::<i32>().map_err(|e| e.into()))
+    run(|content| {
+        let parsed: Result<_> = content
+            .split("\n")
+            .map(|line| line.parse::<i32>().map_err(|e| e.into()))
             .collect();
 
         let vector: Vec<i32> = parsed?;
